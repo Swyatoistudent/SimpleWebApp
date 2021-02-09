@@ -1,0 +1,41 @@
+<html>
+  <head>
+
+
+    <title>BEST SVETIK TODOLIST</title>
+    <style>
+  .button {
+  background-color: #FF0000;
+  border: none;
+  color: white;
+  padding: 4px 4px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 19px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+</style>
+  </head>
+  <body>
+  <label>input todolist name:</label>
+  <form action = "\project_add" method="post">
+    <input type = "text" id="project" name="project">
+      <button type="submit">Submit</button>
+  </form>
+   <label>items:</label>
+    {% for project in data %}
+
+
+
+      <form action = "\delete_project" method="post">
+        <a href  = {{project[0]}}>{{project[1]}}</a>
+        <button class = "button" type="submit" name ="delete_project" value="{{project[0]}}">X</button>
+      </form>
+
+    {% endfor %}
+  <script>
+</script>
+  </body>
+</html>
