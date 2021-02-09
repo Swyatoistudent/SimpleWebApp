@@ -16,8 +16,8 @@
 
 
       <form action = "{{project_id}}\delete_item" method="post">
-        <label>{{item[2]}}</label>
-        <button type="submit" name ="delete_files" value="{{item[0]}}">X</button>
+        <label>{{item.item}}</label>
+        <button type="submit" name ="delete_files" value="{{item.item_id}}">X</button>
       </form>
 
     {% endfor %}

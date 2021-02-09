@@ -30,8 +30,8 @@
 
 
       <form action = "\delete_project" method="post">
-        <a href  = {{project[0]}}>{{project[1]}}</a>
-        <button class = "button" type="submit" name ="delete_project" value="{{project[0]}}">X</button>
+        <a href  = {{project.id}}>{{project.project_name}}</a>
+        <button class = "button" type="submit" name ="delete_project" value="{{project.id}}">X</button>
       </form>
 
     {% endfor %}
