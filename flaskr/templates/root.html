@@ -19,6 +19,7 @@
 </style>
   </head>
   <body>
+  <a style="position: absolute;right: 20px; top: 10px" href = \logout>Log-Out</a>
   <label>input todolist name:</label>
   <form action = "\project_add" method="post">
     <input type = "text" id="project" name="project">
@@ -30,11 +31,12 @@
 
 
       <form action = "\delete_project" method="post">
-        <a href  = {{project.id}}>{{project.project_name}}</a>
+        <a href  = \projects\{{project.id}}>{{project.name}}</a>
         <button class = "button" type="submit" name ="delete_project" value="{{project.id}}">X</button>
       </form>
 
     {% endfor %}
+
   <script>
 </script>
   </body>
