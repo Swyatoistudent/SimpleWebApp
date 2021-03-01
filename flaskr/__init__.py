@@ -22,7 +22,7 @@ def create_app(test_config=None):
     os.makedirs(app.instance_path, exist_ok=True)
     print(db_url)
     app.config.from_mapping(
-        SECRET_KEY='dev',
+        SECRET_KEY='r.i.p my motherboard',
         SQLALCHEMY_DATABASE_URI= db_url
 
     )
