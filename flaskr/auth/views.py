@@ -1,10 +1,18 @@
 import flask
 from flaskr.auth.models import Users
-from flask import Blueprint
+from flask import Blueprint,jsonify
 from functools import wraps
 from flaskr import db
+
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
+
 bp = Blueprint("auth", __name__)
 from flask import g, request, redirect, url_for, session
+
+
+
 
 
 @bp.before_app_request
@@ -26,18 +34,21 @@ def login_required(f):
 
 
 
-@bp.route('/login', methods=["GET","POST"])
+@bp.route('/login', methods=["POST"])
 def login():
-    if request.method == "POST":
-        username = request.form['username']
-        password = request.form['password']
-        user = Users.query.filter_by(username= username,password=password).first()
-        if user is None:
-            return flask.render_template("login.html",massage = "login failed")
-        session['user_id'] = user.id
-        return flask.redirect(url_for('root'))
-    else:
-        return flask.render_template("login.html")
+
+    username = flask.request.json['username']
+    password = flask.request.json['password']
+    print(username)
+    user = Users.query.filter_by(username= username).first()
+    print(user)
+    if user is None:
+        return 'bad username/password',401
+    access_token = create_access_token(identity=username)
+    return jsonify(access_token=access_token)
+
+
+
 @bp.route('/register', methods = ["GET","POST"])
 def register():
     if request.method == "POST":

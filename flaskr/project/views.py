@@ -3,18 +3,25 @@ from flask import Blueprint,g
 from flaskr.project.models import Project,TodoList
 from flaskr import db
 from flaskr.auth.views import login_required
+from flask_jwt_extended import create_access_token
+from flask_jwt_extended import get_jwt_identity
+from flask_jwt_extended import jwt_required
 bp = Blueprint("project", __name__)
+
 @bp.route('/')
-@login_required
 def root():
-    todolists =Project.query.filter_by(user_id =g.user.id).all()
-    return flask.render_template("root.html", data=todolists)
+    todolists =Project.query.filter_by(id=1).all()
+    return {'data':
+                [{"id":i.id,
+                  "user_id":i.user_id,
+                  "name": i.name}
+                 for i in todolists]},\
+           200
 @bp.route('/project_add', methods=["POST"])
-@login_required
 def put_project():
-    db.session.add(Project(user_id=g.user.id,name=flask.request.form['project']))
+    db.session.add(Project(user_id=1,name=flask.request.json['name']))
     db.session.commit()
-    return flask.redirect(flask.url_for('root'))
+    return 'ok',200
 
 
 @bp.route('/projects/delete_project', methods=["POST"])
@@ -26,20 +33,22 @@ def delete_project():
     return flask.redirect(flask.url_for('root'))
 
 @bp.route('/projects/<id>')
-@login_required
 def todolist(id):
 
-    items_list = db.session.query(TodoList).filter_by(project_id = id,user_id = g.user.id).all()
-    return flask.render_template("index.html", data=items_list, project_id=id)
+    items_list = db.session.query(TodoList).filter_by(project_id = id).all()
+    return {'items': [{"project_id":i.project_id,
+                       "item_id":i.item_id,"user_id":i.user_id,
+                       "item": i.item}
+                      for i in items_list]},\
+           200
 #
 #
 @bp.route('/projects/<id>/item_add', methods=["POST"])
-@login_required
 def put_item(id):
 
-    db.session.add(TodoList(user_id=g.user.id,project_id =id,item=flask.request.form['item']))
+    db.session.add(TodoList(project_id =id,item=flask.request.json['item']))
     db.session.commit()
-    return flask.redirect(f'/projects/{id}')
+    return 'ok',200
 #
 #
 @bp.route('/projects/<id>/delete_item', methods=["POST"])
