@@ -1,11 +1,15 @@
 import os
+from datetime import datetime
+from datetime import timedelta
+from datetime import timezone
 from flask_cors import CORS
 import click
+import jwt
 from flask import Flask, g
 from flask_jwt_extended import JWTManager
 from flask.cli import with_appcontext
 
-
+from flask_jwt_extended import get_jwt
 
 import sqlalchemy
 from sqlalchemy import Integer, String, ForeignKey
@@ -20,7 +24,6 @@ def create_app(test_config=None):
 
     jwt = JWTManager(app)
 
-
     # SQLITE path
     db_path = os.path.join(app.instance_path, "flaskr.sqlite")
     db_url = f"sqlite:///{db_path}"
@@ -29,9 +32,13 @@ def create_app(test_config=None):
     print(db_url)
     app.config.from_mapping(
         SECRET_KEY='r.i.p my motherboard',
-        SQLALCHEMY_DATABASE_URI= db_url
+        SQLALCHEMY_DATABASE_URI= db_url,
+        JWT_COOKIE_SECURE=False,
+        JWT_TOKEN_LOCATION=["cookies"],
+        JWT_ACCESS_TOKEN_EXPIRES=timedelta(hours=1)
 
     )
+
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
