@@ -34,11 +34,13 @@ def put_project(user):
 
 
 @bp.route('/projects/delete_project', methods=["POST"])
-def delete_project():
-    Project.query.filter_by(id = flask.request.form['delete_project']).delete()
-    TodoList.query.filter_by(project_id=flask.request.form['delete_project']).delete()
+@token_required
+def delete_project(user):
+    print(flask.request.json['id'])
+    Project.query.filter_by(id = flask.request.json['id']).delete()
+    TodoList.query.filter_by(project_id=flask.request.json['id']).delete()
     db.session.commit()
-    return flask.redirect(flask.url_for('root'))
+    return 'ok',200
 
 @bp.route('/projects/<id>')
 def todolist(id):
@@ -61,10 +63,9 @@ def put_item(id):
 #
 @bp.route('/projects/<id>/delete_item', methods=["POST"])
 def delete_item(id):
-    TodoList.query.filter_by(item_id = flask.request.form['delete_files']).delete()
-
+    TodoList.query.filter_by(project_id=id,item= flask.request.json['item']).delete()
     db.session.commit()
-    return flask.redirect(f'/projects/{id}')
+    return 'ok',200
 
 
 

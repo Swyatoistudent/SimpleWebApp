@@ -102,4 +102,8 @@ def login_user():
             token = create_access_token(identity=user.username)
             return {"access_token" : token}
 
-   return make_response('could not verify',  401, {'Authentication': '"login required"'})
+   return ('could not verify',  401, {'Authentication': '"login required"'})
+
+@bp.route('/logout')
+def log_out():
+    return 'ok',200
