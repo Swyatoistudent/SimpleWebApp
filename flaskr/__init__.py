@@ -56,7 +56,6 @@ def create_app(test_config=None):
 
     # initial db
     db.init_app(app)
-
     app.cli.add_command(init_db_command)
     from flaskr import project,auth
     app.register_blueprint(auth.bp)
